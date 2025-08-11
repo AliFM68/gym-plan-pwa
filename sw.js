@@ -1,7 +1,6 @@
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open('gym-cache-v3').then(c => c.addAll([
-    './','./index.html','./app.js','./plan.json','./manifest.json',
-    './icons/icon-192.png','./icons/icon-512.png'
+  e.waitUntil(caches.open('gym-cache-v4').then(c => c.addAll([
+    './','./index.html','./app.js','./plan.json','./manifest.json'
   ])));
 });
 self.addEventListener('fetch', e => {
