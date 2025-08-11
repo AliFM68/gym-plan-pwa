@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Achilles-Friendly Gym Plan</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#0b0b0c;--card:#15161a;--text:#f7f7f7;--muted:#a9acb2;--accent:#3aa1ff;--ok:#2ecc71;--warn:#f39c12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+.header{padding:16px 16px 6px;font-weight:700;font-size:18px}
+.sub{color:var(--muted);padding:0 16px 8px}
+.tabs{display:flex;gap:8px;padding:8px 8px 0}
+.tab{flex:1;text-align:center;padding:10px;border-radius:10px;background:var(--card);color:var(--muted);cursor:pointer}
+.tab.active{color:var(--text);outline:1px solid #2a2b33}
+.container{padding:12px}
+.card{background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px;border:1px solid #20222a}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.title{font-weight:700}
+.badge{font-size:12px;color:var(--muted)}
+.button{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none}
+.small{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.2fr 1fr .9fr;gap:8px}
+.ex-title{font-weight:600}
+.ex-tips,.ex-desc{font-size:13px;color:var(--muted)}
+.check{font-size:20px}
+.footer{position:sticky;bottom:0;background:linear-gradient(transparent, var(--bg) 40%);padding:16px}
+.notice{font-size:12px;color:var(--muted);padding:0 16px 12px}
+hr{border:none;border-top:1px solid #24262f;margin:12px 0}
+.points{display:flex;gap:10px}
+.points .card{flex:1;text-align:center}
+a{color:#9ecbff}
+</style>
+</head>
+<body>
+<div class="header">Achilles-Friendly Gym Plan</div>
+<div class="sub" id="todaySub"></div>
+<div class="tabs">
+  <div class="tab active" data-tab="today">Today</div>
+  <div class="tab" data-tab="sessions">Sessions</div>
+  <div class="tab" data-tab="progress">Progress</div>
+</div>
+
+<div id="view-today" class="container"></div>
+<div id="view-sessions" class="container" style="display:none"></div>
+<div id="view-progress" class="container" style="display:none"></div>
+
+<div class="notice">Tip: In Safari, share ▶︎ <b>Add to Home Screen</b> to use it like an app. Progress is saved on your iPhone.</div>
+
+<script src="app.js"></script>
+</body>
+</html>
