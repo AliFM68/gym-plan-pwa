@@ -3,6 +3,7 @@ const views = {
   today: $("#view-today"),
   sessions: $("#view-sessions"),
   progress: $("#view-progress"),
+  warmup: $("#view-warmup"),
   settings: $("#view-settings"),
 };
 const tabs = document.querySelectorAll(".tab");
@@ -13,19 +14,22 @@ tabs.forEach(t => t.addEventListener("click", () => {
   Object.keys(views).forEach(k => views[k].style.display = (k===tab?"block":"none"));
   if (tab === "progress") renderProgress();
   if (tab === "settings") renderSettings();
+  if (tab === "warmup") renderWarmupList();
 }));
 
-let data = { sessions: [] };
-let done = JSON.parse(localStorage.getItem("done") || "{}"); // {exerciseId:true}
+let data = { sessions: [], warmup: [] };
+let done = JSON.parse(localStorage.getItem("done") || "{}");
 let points = parseInt(localStorage.getItem("points") || "0", 10);
 let streak = parseInt(localStorage.getItem("streak") || "0", 10);
 let lastDay = localStorage.getItem("lastDay") || "";
-let notes = JSON.parse(localStorage.getItem("notes") || "{}"); // {exerciseId: "text"}
+let notes = JSON.parse(localStorage.getItem("notes") || "{}");
 let theme = localStorage.getItem("theme") || "dark";
-let history = JSON.parse(localStorage.getItem("history") || "{}"); // {exerciseId: [{date, kg, reps}]}
-let dayMap = JSON.parse(localStorage.getItem("dayMap") || "{}"); // {"1":0,"2":0,"3":1,...} 0=Session1,1=Session2,2=Home
+let history = JSON.parse(localStorage.getItem("history") || "{}");
+let dayMap = JSON.parse(localStorage.getItem("dayMap") || "{}");
+let wuSeconds = parseInt(localStorage.getItem("wuSeconds") || "30", 10);
+
 if (Object.keys(dayMap).length === 0) {
-  // Default: Mon/Tue -> S1, Wed/Thu -> S2, Fri-Sun -> Home
+  // Mon/Tue -> S1, Wed/Thu -> S2, Fri–Sun -> Home
   dayMap = {"1":0,"2":0,"3":1,"4":1,"5":2,"6":2,"0":2}; // 0=Sun..6=Sat
 }
 
@@ -38,6 +42,7 @@ function save() {
   localStorage.setItem("theme", theme);
   localStorage.setItem("history", JSON.stringify(history));
   localStorage.setItem("dayMap", JSON.stringify(dayMap));
+  localStorage.setItem("wuSeconds", String(wuSeconds));
 }
 
 function applyTheme() {
@@ -53,18 +58,17 @@ async function load() {
   const res = await fetch("plan.json");
   data = await res.json();
   data.sessions.forEach(s => s.items.forEach(ex => { ex.id = ex.id || uid(); }));
-  renderToday(); renderSessions(); renderProgress();
+  renderToday(); renderSessions(); renderProgress(); renderWarmupList();
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 }
 load();
 
 function sessionIndexForDay(d) {
   const idx = dayMap[String(d)];
-  if (idx === undefined) return 2; // default to Home
-  return idx;
+  return idx === undefined ? 2 : idx;
 }
 function daySessionIndex() {
-  const d = new Date().getDay(); // 0 Sun ... 6 Sat
+  const d = new Date().getDay();
   return sessionIndexForDay(d);
 }
 
@@ -120,12 +124,10 @@ function sessionTable(s) {
 }
 
 function attachHandlers() {
-  // preload notes
   document.querySelectorAll("textarea[data-notes]").forEach(t => {
     const id = t.dataset.notes; t.value = notes[id] || "";
     t.addEventListener("input", e => { notes[id] = e.target.value; save(); });
   });
-  // checkboxes
   document.querySelectorAll("input[type=checkbox][data-ex]").forEach(cb => {
     cb.addEventListener("change", e => {
       const id = e.target.dataset.ex;
@@ -134,7 +136,6 @@ function attachHandlers() {
       save(); renderProgress();
     });
   });
-  // add set
   document.querySelectorAll("[data-addset]").forEach(btn => {
     btn.addEventListener("click", e => {
       e.preventDefault();
@@ -146,18 +147,15 @@ function attachHandlers() {
       const entry = { date: new Date().toLocaleDateString(), kg, reps };
       if (!history[id]) history[id] = [];
       history[id].unshift(entry);
-      // keep only latest 10
       history[id] = history[id].slice(0, 10);
       save();
       renderHistoryTable(id);
       kgEl.value = ""; repsEl.value = "";
     });
   });
-  // render existing tables
   document.querySelectorAll("table[data-table]").forEach(tbl => {
     renderHistoryTable(tbl.dataset.table);
   });
-  // session complete
   document.querySelectorAll("[data-complete]").forEach(btn => {
     btn.addEventListener("click", e => {
       e.preventDefault(); points += 50;
@@ -196,6 +194,75 @@ function renderProgress() {
     </div>`;
 }
 
+/* ---------- Warm-Up Tab ---------- */
+function renderWarmupList() {
+  const wu = data.warmup || [];
+  views.warmup.innerHTML = `
+    <div class="card">
+      <div class="row">
+        <div class="title">Warm-Up (no band)</div>
+        <div class="small">Timer: ${wuSeconds}s • <a href="#" id="wuStart" class="button">Start Warm-Up</a></div>
+      </div>
+      <div class="wu-grid">
+        ${wu.map(x => `
+          <div class="wu-card">
+            <div class="wu-thumb">${x.emoji||"🧍"}</div>
+            <div class="wu-body">
+              <div class="wu-name">${x.name} ${x.time?`• ${x.time}`:x.reps?`• ${x.reps}`:''}</div>
+              <div class="wu-desc">${x.desc}</div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>`;
+  $("#wuStart").addEventListener("click", e => { e.preventDefault(); startWarmupFlow(); });
+}
+
+let flowIdx = 0, flowTimer = null, flowRemain = 0;
+function startWarmupFlow() {
+  const wu = data.warmup || [];
+  flowIdx = 0;
+  showFlowStep(wu[flowIdx]);
+}
+function showFlowStep(step) {
+  const wu = data.warmup || [];
+  if (!step) {
+    views.warmup.innerHTML = `
+      <div class="card flow">
+        <div class="success">✅</div>
+        <div class="title">Warm-Up Complete</div>
+        <a href="#" class="big-btn" id="wuBack">Back to Warm-Up</a>
+      </div>`;
+    $("#wuBack").addEventListener("click", e => { e.preventDefault(); renderWarmupList(); });
+    return;
+  }
+  const secs = step.time && parseInt(step.time) ? parseInt(step.time) : wuSeconds;
+  flowRemain = secs;
+  views.warmup.innerHTML = `
+    <div class="card flow">
+      <div class="wu-thumb" style="width:100%;max-width:420px;border-radius:12px;border:1px solid var(--line);height:220px;font-size:56px">${step.emoji||"🧍"}</div>
+      <div class="title">${step.name}</div>
+      <div class="small">${step.desc}</div>
+      <div class="timer" id="timer">${flowRemain}</div>
+      <div style="display:flex;gap:10px">
+        <a href="#" class="big-btn" id="skip">Skip</a>
+        <a href="#" class="big-btn" id="next">Next</a>
+      </div>
+    </div>`;
+  tickTimer(() => { flowIdx += 1; showFlowStep(wu[flowIdx]); });
+  $("#skip").addEventListener("click", e => { e.preventDefault(); clearInterval(flowTimer); flowIdx += 1; showFlowStep(wu[flowIdx]); });
+  $("#next").addEventListener("click", e => { e.preventDefault(); clearInterval(flowTimer); flowIdx += 1; showFlowStep(wu[flowIdx]); });
+}
+function tickTimer(done) {
+  clearInterval(flowTimer);
+  flowTimer = setInterval(() => {
+    flowRemain -= 1;
+    if ($("#timer")) $("#timer").textContent = flowRemain;
+    if (flowRemain <= 0) { clearInterval(flowTimer); done(); }
+  }, 1000);
+}
+
+/* ---------- Settings ---------- */
 function renderSettings() {
   const names = ["Session 1 – Gym Push", "Session 2 – Gym Pull", "Session 3 – Home Back"];
   const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -214,9 +281,16 @@ function renderSettings() {
       <div class="small">Choose which session appears on each weekday.</div>
       <div class="settings">${rows}</div>
       <div style="margin-top:10px"><a href="#" class="button" id="saveDays">Save</a></div>
+    </div>
+    <div class="card">
+      <div class="title">Warm-Up Timer</div>
+      <div class="small">Choose step duration (seconds)</div>
+      <div class="inputs">
+        <input type="number" id="wuSecs" min="10" max="120" step="5" value="${wuSeconds}">
+        <a href="#" class="button" id="saveWU">Save</a>
+      </div>
     </div>`;
 
-  // set current selections
   document.querySelectorAll("select[data-day]").forEach(sel => {
     const d = sel.dataset.day; sel.value = String(dayMap[d] ?? 2);
   });
@@ -225,8 +299,12 @@ function renderSettings() {
     document.querySelectorAll("select[data-day]").forEach(sel => {
       dayMap[sel.dataset.day] = parseInt(sel.value, 10);
     });
-    save();
-    alert("Saved! Today view will use your mapping.");
-    renderToday();
+    save(); alert("Saved! Today view will use your mapping."); renderToday();
+  });
+  $("#saveWU").addEventListener("click", e => {
+    e.preventDefault();
+    const v = parseInt($("#wuSecs").value || "30", 10);
+    wuSeconds = Math.max(10, Math.min(120, v));
+    save(); alert("Warm-Up timer updated.");
   });
 }
