@@ -4,179 +4,47 @@
       "title": "Session 1 – Gym Push, Chest & Core",
       "location": "Gym",
       "items": [
-        {
-          "block": "A1",
-          "name": "Dumbbell Bench Press",
-          "setsReps": "4 x 6-10",
-          "tips": "Place feet on bench to avoid ankle strain.",
-          "desc": "Lie on bench and press dumbbells from chest to straight arms.",
-          "video": "https://www.youtube.com/results?search_query=dumbbell+bench+press+form"
-        },
-        {
-          "block": "A2",
-          "name": "Seated Cable Face Pull",
-          "setsReps": "4 x 12-15",
-          "tips": "Pull rope to eyebrow level, pause 1 s.",
-          "desc": "Seated; pull cable toward face to work rear delts/upper back.",
-          "video": "https://www.youtube.com/results?search_query=face+pull+form"
-        },
-        {
-          "block": "B1",
-          "name": "Seated DB Overhead Press",
-          "setsReps": "3 x 8-12",
-          "tips": "Keep back supported; do not stand.",
-          "desc": "Press dumbbells overhead while seated upright.",
-          "video": "https://www.youtube.com/results?search_query=seated+dumbbell+overhead+press+form"
-        },
-        {
-          "block": "B2",
-          "name": "Rope Triceps Press-down",
-          "setsReps": "3 x 10-15",
-          "tips": "Elbows fixed to ribs.",
-          "desc": "Push cable rope downward, fully extending elbows.",
-          "video": "https://www.youtube.com/results?search_query=rope+triceps+pressdown+form"
-        },
-        {
-          "block": "C",
-          "name": "Dead-bug Hold",
-          "setsReps": "3 x 15-20 s",
-          "tips": "Keep lower back glued to floor.",
-          "desc": "On back, lower opposite arm & leg while bracing core.",
-          "video": "https://www.youtube.com/results?search_query=dead+bug+exercise+form"
-        }
+        {"block":"A1","name":"Dumbbell Bench Press","setsReps":"4 x 6-10","tips":"Place feet on bench to avoid ankle strain.","desc":"Lie on bench and press dumbbells from chest to straight arms.","video":"https://www.youtube.com/results?search_query=dumbbell+bench+press+form"},
+        {"block":"A2","name":"Seated Cable Face Pull","setsReps":"4 x 12-15","tips":"Pull to eyebrow level, pause 1 s.","desc":"Seated; pull cable toward face to hit rear delts/upper back.","video":"https://www.youtube.com/results?search_query=face+pull+form"},
+        {"block":"B1","name":"Seated DB Overhead Press","setsReps":"3 x 8-12","tips":"Keep back supported; stay seated.","desc":"Press dumbbells overhead while seated upright.","video":"https://www.youtube.com/results?search_query=seated+dumbbell+overhead+press+form"},
+        {"block":"B2","name":"Cable/Bar Triceps Press-down","setsReps":"3 x 10-15","tips":"Elbows fixed to ribs.","desc":"Press bar/handle downward, fully extending elbows.","video":"https://www.youtube.com/results?search_query=cable+triceps+pressdown+form"},
+        {"block":"C","name":"Dead-bug Hold","setsReps":"3 x 15-20 s","tips":"Lower back glued to floor.","desc":"On back, lower opposite arm & leg while bracing core.","video":"https://www.youtube.com/results?search_query=dead+bug+exercise+form"}
       ]
     },
     {
       "title": "Session 2 – Gym Pull, Lats & Arms",
       "location": "Gym",
       "items": [
-        {
-          "block": "A1",
-          "name": "One-arm DB Row",
-          "setsReps": "4 x 6-10",
-          "tips": "Control 2 s lowering phase.",
-          "desc": "Row dumbbell with one arm; opposite knee & hand on bench.",
-          "video": "https://www.youtube.com/results?search_query=one+arm+dumbbell+row+form"
-        },
-        {
-          "block": "A2",
-          "name": "Assisted Pull-up / Band Lat Pull-down",
-          "setsReps": "4 x 6-10",
-          "tips": "Stretch fully at bottom.",
-          "desc": "Use band/machine to mimic pull-up, driving elbows down.",
-          "video": "https://www.youtube.com/results?search_query=assisted+pull+up+or+lat+pulldown+form"
-        },
-        {
-          "block": "B1",
-          "name": "Incline DB Reverse Fly",
-          "setsReps": "3 x 12-15",
-          "tips": "Bench at 30°, thumbs up.",
-          "desc": "Raise light dumbbells sideways on incline; targets rear delts.",
-          "video": "https://www.youtube.com/results?search_query=incline+reverse+fly+form"
-        },
-        {
-          "block": "B2",
-          "name": "Seated Curl (DB or EZ-bar)",
-          "setsReps": "3 x 8-12",
-          "tips": "Shoulders pinned to seat.",
-          "desc": "Curl weight up while seated; palms face up.",
-          "video": "https://www.youtube.com/results?search_query=seated+curl+ez+bar+form"
-        },
-        {
-          "block": "C",
-          "name": "Cable Pallof Press",
-          "setsReps": "3 x 12 / side",
-          "tips": "Kneel or sit; resist twist.",
-          "desc": "Press cable straight out, keeping torso still to train core.",
-          "video": "https://www.youtube.com/results?search_query=pallof+press+form"
-        }
+        {"block":"A1","name":"One-arm DB Row","setsReps":"4 x 6-10","tips":"Control 2 s lowering phase.","desc":"Row dumbbell with one arm; opposite knee & hand on bench.","video":"https://www.youtube.com/results?search_query=one+arm+dumbbell+row+form"},
+        {"block":"A2","name":"Assisted Pull-up / Band Lat Pull-down","setsReps":"4 x 6-10","tips":"Stretch fully at bottom.","desc":"Use band/machine to mimic pull-up, driving elbows down.","video":"https://www.youtube.com/results?search_query=assisted+pull+up+or+lat+pulldown+form"},
+        {"block":"B1","name":"Incline DB Reverse Fly","setsReps":"3 x 12-15","tips":"Bench ~30°, thumbs up.","desc":"Raise light dumbbells sideways on incline; rear delts.","video":"https://www.youtube.com/results?search_query=incline+reverse+fly+form"},
+        {"block":"B2","name":"Seated Curl (DB or EZ-bar)","setsReps":"3 x 8-12","tips":"Shoulders pinned to seat.","desc":"Curl weight up while seated; palms face up.","video":"https://www.youtube.com/results?search_query=seated+curl+ez+bar+form"},
+        {"block":"C","name":"Cable Pallof Press","setsReps":"3 x 12 / side","tips":"Kneel or sit; resist twist.","desc":"Press cable straight out, keeping torso still to train core.","video":"https://www.youtube.com/results?search_query=pallof+press+form"}
       ]
     },
     {
-      "title": "Session 3 – Home Back‑Care & Mobility",
+      "title": "Session 3 – Home Back-Care & Mobility",
       "location": "Home",
       "items": [
-        {
-          "block": "Warm-up",
-          "name": "Thoracic Foam Roll",
-          "setsReps": "1 x 30 s",
-          "tips": "Slow rolls upper back.",
-          "desc": "Roll mid‑back gently on foam roller.",
-          "video": "https://www.youtube.com/results?search_query=thoracic+spine+foam+rolling"
-        },
-        {
-          "block": "Warm-up",
-          "name": "Cat‑Cow",
-          "setsReps": "1 x 10",
-          "tips": "Smooth spinal wave.",
-          "desc": "Alternate arching and rounding back on hands & knees.",
-          "video": "https://www.youtube.com/results?search_query=cat+cow+exercise"
-        },
-        {
-          "block": "C1‑1",
-          "name": "Band Face Pull + External Rotation",
-          "setsReps": "3 x 15",
-          "tips": "Light band; control.",
-          "desc": "Pull band to face, then externally rotate shoulders.",
-          "video": "https://www.youtube.com/results?search_query=band+face+pull+external+rotation"
-        },
-        {
-          "block": "C1‑2",
-          "name": "Band Pull‑apart (palms up)",
-          "setsReps": "3 x 20",
-          "tips": "Level with chest.",
-          "desc": "Stretch band apart at shoulder height.",
-          "video": "https://www.youtube.com/results?search_query=band+pull+apart+palms+up"
-        },
-        {
-          "block": "C1‑3",
-          "name": "Bird‑dog",
-          "setsReps": "3 x 10 / side",
-          "tips": "Hips level; slow.",
-          "desc": "Reach opposite arm & leg; keep core stable.",
-          "video": "https://www.youtube.com/results?search_query=bird+dog+exercise+form"
-        },
-        {
-          "block": "C2‑1",
-          "name": "Prone Y‑T‑W Raises",
-          "setsReps": "3 x 8 each",
-          "tips": "Light weight or none.",
-          "desc": "Lift arms in Y, T, W shapes lying face‑down.",
-          "video": "https://www.youtube.com/results?search_query=prone+Y+T+W+raises"
-        },
-        {
-          "block": "C2‑2",
-          "name": "Scapular Push-ups",
-          "setsReps": "3 x 12",
-          "tips": "Arms straight.",
-          "desc": "Protract/retract shoulder blades in plank position.",
-          "video": "https://www.youtube.com/results?search_query=scapular+push+ups+form"
-        },
-        {
-          "block": "C2‑3",
-          "name": "Dead Hang / Lying Lat Stretch",
-          "setsReps": "3 x 20 s",
-          "tips": "Relax shoulders.",
-          "desc": "Hang from bar or reach overhead on floor to stretch lats.",
-          "video": "https://www.youtube.com/results?search_query=dead+hang+lat+stretch"
-        },
-        {
-          "block": "Cooldown",
-          "name": "Doorway Pec Stretch",
-          "setsReps": "1 x 30 s / side",
-          "tips": "Gentle chest stretch.",
-          "desc": "Press forearm on doorway; lean forward.",
-          "video": "https://www.youtube.com/results?search_query=doorway+pec+stretch"
-        },
-        {
-          "block": "Cooldown",
-          "name": "Child's Pose + Side Reach",
-          "setsReps": "1 x 30 s / side",
-          "tips": "Reach long.",
-          "desc": "Sit back on heels; reach arms to side for lat stretch.",
-          "video": "https://www.youtube.com/results?search_query=child%27s+pose+side+reach"
-        }
+        {"block":"Warm-up","name":"Thoracic Foam Roll","setsReps":"1 x 30 s","tips":"Slow rolls upper back.","desc":"Roll mid-back gently on foam roller.","video":"https://www.youtube.com/results?search_query=thoracic+spine+foam+rolling"},
+        {"block":"Warm-up","name":"Cat-Cow","setsReps":"1 x 10","tips":"Smooth spinal wave.","desc":"Alternate arching and rounding back on hands & knees.","video":"https://www.youtube.com/results?search_query=cat+cow+exercise"},
+        {"block":"C1-1","name":"Band Face Pull + External Rotation","setsReps":"3 x 15","tips":"Light band; control.","desc":"Pull band to face, then externally rotate shoulders.","video":"https://www.youtube.com/results?search_query=band+face+pull+external+rotation"},
+        {"block":"C1-2","name":"Band Pull-apart (palms up)","setsReps":"3 x 20","tips":"Level with chest.","desc":"Stretch band apart at shoulder height.","video":"https://www.youtube.com/results?search_query=band+pull+apart+palms+up"},
+        {"block":"C1-3","name":"Bird-dog","setsReps":"3 x 10 / side","tips":"Hips level; slow.","desc":"Reach opposite arm & leg; keep core stable.","video":"https://www.youtube.com/results?search_query=bird+dog+exercise+form"},
+        {"block":"C2-1","name":"Prone Y-T-W Raises","setsReps":"3 x 8 each","tips":"Light weight or none.","desc":"Lift arms in Y, T, W shapes lying face-down.","video":"https://www.youtube.com/results?search_query=prone+Y+T+W+raises"},
+        {"block":"C2-2","name":"Scapular Push-ups","setsReps":"3 x 12","tips":"Arms straight.","desc":"Protract/retract shoulder blades in plank position.","video":"https://www.youtube.com/results?search_query=scapular+push+ups+form"},
+        {"block":"C2-3","name":"Dead Hang / Lying Lat Stretch","setsReps":"3 x 20 s","tips":"Relax shoulders.","desc":"Hang from bar or reach overhead on floor to stretch lats.","video":"https://www.youtube.com/results?search_query=dead+hang+lat+stretch"},
+        {"block":"Cooldown","name":"Doorway Pec Stretch","setsReps":"1 x 30 s / side","tips":"Gentle chest stretch.","desc":"Press forearm on doorway; lean forward.","video":"https://www.youtube.com/results?search_query=doorway+pec+stretch"},
+        {"block":"Cooldown","name":"Child's Pose + Side Reach","setsReps":"1 x 30 s / side","tips":"Reach long.","desc":"Sit back on heels; reach arms to side for lat stretch.","video":"https://www.youtube.com/results?search_query=child%27s+pose+side+reach"}
       ]
     }
+  ],
+  "warmup": [
+    {"key":"shoulder_rolls","emoji":"🧍","name":"Seated Shoulder Rolls","time":"30","desc":"Lift shoulders up, roll back and down slowly."},
+    {"key":"neck_mob","emoji":"🙂","name":"Neck Tilts & Rotations","time":"30","desc":"Gentle side tilts and slow rotations."},
+    {"key":"arm_circles","emoji":"💪","name":"Arm Circles","time":"30","desc":"Start small, gradually bigger; forward and backward."},
+    {"key":"wall_angels","emoji":"👐","name":"Wall Angels","time":"30","desc":"Back to wall; slide arms up and down."},
+    {"key":"prone_w","emoji":"🔰","name":"Prone “W” Raises","time":"30","desc":"Lie face-down; lift elbows to form a 'W'."},
+    {"key":"torso_rot","emoji":"🔄","name":"Seated Torso Rotations","time":"30","desc":"Cross arms; rotate gently side to side."}
   ]
 }
