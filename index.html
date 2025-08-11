@@ -9,34 +9,51 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
-:root{--bg:#0b0b0c;--card:#15161a;--text:#f7f7f7;--muted:#a9acb2;--accent:#3aa1ff;--ok:#2ecc71;--warn:#f39c12}
-:root.light{--bg:#fafafa;--card:#ffffff;--text:#0b0b0c;--muted:#475269;--accent:#2563eb;--ok:#16a34a;--warn:#b45309}
+:root{
+  /* My fav palette: deep navy + teal accents */
+  --bg:#0a0f1a; --card:#111827; --text:#e6f0ff; --muted:#9fb3c8;
+  --accent:#14b8a6; --ok:#22c55e; --warn:#f59e0b; --line:#1f2937;
+}
+:root.light{
+  --bg:#f8fafc; --card:#ffffff; --text:#0a0f1a; --muted:#4b5563;
+  --accent:#0ea5e9; --ok:#16a34a; --warn:#b45309; --line:#e5e7eb;
+}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 .header{padding:16px 16px 6px;font-weight:700;font-size:18px;display:flex;justify-content:space-between;align-items:center}
 .theme{font-size:13px;color:var(--muted)}
 .sub{color:var(--muted);padding:0 16px 8px}
 .tabs{display:flex;gap:8px;padding:8px 8px 0}
-.tab{flex:1;text-align:center;padding:10px;border-radius:10px;background:var(--card);color:var(--muted);cursor:pointer}
-.tab.active{color:var(--text);outline:1px solid #2a2b33}
+.tab{flex:1;text-align:center;padding:10px;border-radius:10px;background:var(--card);color:var(--muted);cursor:pointer;border:1px solid var(--line)}
+.tab.active{color:var(--text);outline:1px solid var(--accent)}
 .container{padding:12px}
-.card{background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px;border:1px solid #20222a}
+.card{background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px;border:1px solid var(--line)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .title{font-weight:700}
 .badge{font-size:12px;color:var(--muted)}
-.button{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none}
+.button{display:inline-block;background:var(--accent);color:#0b0b0b;padding:10px 14px;border-radius:12px;text-decoration:none;font-weight:700}
 .small{font-size:12px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:1.2fr 1fr .9fr;gap:8px}
+.grid{display:grid;grid-template-columns:1.1fr 1fr .9fr;gap:8px}
 .ex-title{font-weight:600}
 .ex-tips,.ex-desc{font-size:13px;color:var(--muted)}
 .check{font-size:20px}
 .footer{position:sticky;bottom:0;background:linear-gradient(transparent, var(--bg) 40%);padding:16px}
 .notice{font-size:12px;color:var(--muted);padding:0 16px 12px}
-hr{border:none;border-top:1px solid #24262f;margin:12px 0}
+hr{border:none;border-top:1px solid var(--line);margin:12px 0}
 .points{display:flex;gap:10px}
 .points .card{flex:1;text-align:center}
-a{color:#9ecbff}
-.notes{width:100%;border:1px solid #2b2d35;border-radius:10px;background:transparent;color:var(--text);padding:8px;font-size:13px}
+a{color:#7dd3fc}
+.notes{width:100%;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);padding:8px;font-size:13px}
 .label{font-size:12px;color:var(--muted);margin:6px 0 2px}
+.inputs{display:flex;gap:8px;align-items:center;margin-top:8px}
+input[type=number]{width:90px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:8px;padding:6px}
+.table{width:100%;border-collapse:collapse;margin-top:6px}
+.table th,.table td{border:1px solid var(--line);padding:6px;font-size:12px;color:var(--text)}
+.table th{color:var(--muted);text-align:left}
+.settings{display:grid;grid-template-columns:1fr;gap:10px}
+.settings .row{justify-content:flex-start}
+.day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.day-pill{padding:8px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text)}
+.select{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:8px;padding:6px}
 </style>
 </head>
 <body>
@@ -49,13 +66,15 @@ a{color:#9ecbff}
   <div class="tab active" data-tab="today">Today</div>
   <div class="tab" data-tab="sessions">Sessions</div>
   <div class="tab" data-tab="progress">Progress</div>
+  <div class="tab" data-tab="settings">Settings</div>
 </div>
 
 <div id="view-today" class="container"></div>
 <div id="view-sessions" class="container" style="display:none"></div>
 <div id="view-progress" class="container" style="display:none"></div>
+<div id="view-settings" class="container" style="display:none"></div>
 
-<div class="notice">Tip: In Safari, share ▶︎ <b>Add to Home Screen</b> to use it like an app. Progress & notes save on your iPhone.</div>
+<div class="notice">Tip: In Safari, share ▶︎ <b>Add to Home Screen</b>. Works offline. Notes & history save on your iPhone.</div>
 
 <script src="app.js"></script>
 </body>

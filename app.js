@@ -1,5 +1,10 @@
 const $ = sel => document.querySelector(sel);
-const views = { today: $("#view-today"), sessions: $("#view-sessions"), progress: $("#view-progress") };
+const views = {
+  today: $("#view-today"),
+  sessions: $("#view-sessions"),
+  progress: $("#view-progress"),
+  settings: $("#view-settings"),
+};
 const tabs = document.querySelectorAll(".tab");
 tabs.forEach(t => t.addEventListener("click", () => {
   tabs.forEach(x => x.classList.remove("active"));
@@ -7,15 +12,22 @@ tabs.forEach(t => t.addEventListener("click", () => {
   const tab = t.dataset.tab;
   Object.keys(views).forEach(k => views[k].style.display = (k===tab?"block":"none"));
   if (tab === "progress") renderProgress();
+  if (tab === "settings") renderSettings();
 }));
 
 let data = { sessions: [] };
-let done = JSON.parse(localStorage.getItem("done") || "{}");
+let done = JSON.parse(localStorage.getItem("done") || "{}"); // {exerciseId:true}
 let points = parseInt(localStorage.getItem("points") || "0", 10);
 let streak = parseInt(localStorage.getItem("streak") || "0", 10);
 let lastDay = localStorage.getItem("lastDay") || "";
-let notes = JSON.parse(localStorage.getItem("notes") || "{}");
+let notes = JSON.parse(localStorage.getItem("notes") || "{}"); // {exerciseId: "text"}
 let theme = localStorage.getItem("theme") || "dark";
+let history = JSON.parse(localStorage.getItem("history") || "{}"); // {exerciseId: [{date, kg, reps}]}
+let dayMap = JSON.parse(localStorage.getItem("dayMap") || "{}"); // {"1":0,"2":0,"3":1,...} 0=Session1,1=Session2,2=Home
+if (Object.keys(dayMap).length === 0) {
+  // Default: Mon/Tue -> S1, Wed/Thu -> S2, Fri-Sun -> Home
+  dayMap = {"1":0,"2":0,"3":1,"4":1,"5":2,"6":2,"0":2}; // 0=Sun..6=Sat
+}
 
 function save() {
   localStorage.setItem("done", JSON.stringify(done));
@@ -24,6 +36,8 @@ function save() {
   localStorage.setItem("lastDay", lastDay);
   localStorage.setItem("notes", JSON.stringify(notes));
   localStorage.setItem("theme", theme);
+  localStorage.setItem("history", JSON.stringify(history));
+  localStorage.setItem("dayMap", JSON.stringify(dayMap));
 }
 
 function applyTheme() {
@@ -44,8 +58,14 @@ async function load() {
 }
 load();
 
+function sessionIndexForDay(d) {
+  const idx = dayMap[String(d)];
+  if (idx === undefined) return 2; // default to Home
+  return idx;
+}
 function daySessionIndex() {
-  const d = new Date().getDay(); if (d===1 || d===2) return 0; if (d===3 || d===4) return 1; return 2;
+  const d = new Date().getDay(); // 0 Sun ... 6 Sat
+  return sessionIndexForDay(d);
 }
 
 function renderToday() {
@@ -84,17 +104,28 @@ function sessionTable(s) {
         <div><a href="${ex.video}" target="_blank">Guide Video</a></div>
       </div>
       <div class="ex-desc">${ex.desc}</div>
-      <div class="label">Notes (saved on device)</div>
+      <div class="label">Notes</div>
       <textarea class="notes" data-notes="${ex.id}" rows="2" placeholder="Weight, reps, pain-free range, cues..."></textarea>
+
+      <div class="label">Add set to history (kg × reps)</div>
+      <div class="inputs">
+        <input type="number" inputmode="decimal" placeholder="kg" step="0.5" min="0" data-kg="${ex.id}">
+        <input type="number" inputmode="numeric" placeholder="reps" step="1" min="1" data-reps="${ex.id}">
+        <a href="#" class="button" data-addset="${ex.id}">Add Set</a>
+      </div>
+
+      <table class="table" data-table="${ex.id}"><thead><tr><th>Date</th><th>kg</th><th>Reps</th></tr></thead><tbody></tbody></table>
       <hr>
     </div>`).join("");
 }
 
 function attachHandlers() {
+  // preload notes
   document.querySelectorAll("textarea[data-notes]").forEach(t => {
     const id = t.dataset.notes; t.value = notes[id] || "";
     t.addEventListener("input", e => { notes[id] = e.target.value; save(); });
   });
+  // checkboxes
   document.querySelectorAll("input[type=checkbox][data-ex]").forEach(cb => {
     cb.addEventListener("change", e => {
       const id = e.target.dataset.ex;
@@ -103,6 +134,30 @@ function attachHandlers() {
       save(); renderProgress();
     });
   });
+  // add set
+  document.querySelectorAll("[data-addset]").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+      const id = btn.dataset.addset;
+      const kgEl = document.querySelector(`[data-kg="${id}"]`);
+      const repsEl = document.querySelector(`[data-reps="${id}"]`);
+      const kg = parseFloat(kgEl.value); const reps = parseInt(repsEl.value || "0", 10);
+      if (isNaN(kg) || isNaN(reps) || reps <= 0) { alert("Enter kg and reps."); return; }
+      const entry = { date: new Date().toLocaleDateString(), kg, reps };
+      if (!history[id]) history[id] = [];
+      history[id].unshift(entry);
+      // keep only latest 10
+      history[id] = history[id].slice(0, 10);
+      save();
+      renderHistoryTable(id);
+      kgEl.value = ""; repsEl.value = "";
+    });
+  });
+  // render existing tables
+  document.querySelectorAll("table[data-table]").forEach(tbl => {
+    renderHistoryTable(tbl.dataset.table);
+  });
+  // session complete
   document.querySelectorAll("[data-complete]").forEach(btn => {
     btn.addEventListener("click", e => {
       e.preventDefault(); points += 50;
@@ -115,6 +170,13 @@ function attachHandlers() {
       lastDay = today; save(); renderProgress(); alert("Session completed! +50 points, streak updated.");
     });
   });
+}
+
+function renderHistoryTable(exId) {
+  const tbody = document.querySelector(`table[data-table="${exId}"] tbody`);
+  if (!tbody) return;
+  const rows = (history[exId] || []).map(r => `<tr><td>${r.date}</td><td>${r.kg}</td><td>${r.reps}</td></tr>`).join("");
+  tbody.innerHTML = rows || `<tr><td colspan="3" style="color:var(--muted)">No sets yet</td></tr>`;
 }
 
 function renderProgress() {
@@ -132,4 +194,39 @@ function renderProgress() {
       <div class="title">Achievements</div>
       <div class="small">${ach.length?ach.map(a=>`• ${a}`).join('<br>'):'No achievements yet. Complete a session to start earning badges!'}</div>
     </div>`;
+}
+
+function renderSettings() {
+  const names = ["Session 1 – Gym Push", "Session 2 – Gym Pull", "Session 3 – Home Back"];
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const options = names.map((n,i)=>`<option value="${i}">${n}</option>`).join("");
+  const rows = days.map((d,idx)=>{
+    const val = dayMap[String(idx)] ?? 2;
+    return `<div class="row">
+      <div class="day-pill">${d}</div>
+      <select class="select" data-day="${idx}">${options}</select>
+    </div>`;
+  }).join("");
+
+  views.settings.innerHTML = `
+    <div class="card">
+      <div class="title">Custom Days</div>
+      <div class="small">Choose which session appears on each weekday.</div>
+      <div class="settings">${rows}</div>
+      <div style="margin-top:10px"><a href="#" class="button" id="saveDays">Save</a></div>
+    </div>`;
+
+  // set current selections
+  document.querySelectorAll("select[data-day]").forEach(sel => {
+    const d = sel.dataset.day; sel.value = String(dayMap[d] ?? 2);
+  });
+  $("#saveDays").addEventListener("click", e => {
+    e.preventDefault();
+    document.querySelectorAll("select[data-day]").forEach(sel => {
+      dayMap[sel.dataset.day] = parseInt(sel.value, 10);
+    });
+    save();
+    alert("Saved! Today view will use your mapping.");
+    renderToday();
+  });
 }
