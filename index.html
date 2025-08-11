@@ -9,15 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
-:root{
-  /* My fav palette: deep navy + teal accents */
-  --bg:#0a0f1a; --card:#111827; --text:#e6f0ff; --muted:#9fb3c8;
-  --accent:#14b8a6; --ok:#22c55e; --warn:#f59e0b; --line:#1f2937;
-}
-:root.light{
-  --bg:#f8fafc; --card:#ffffff; --text:#0a0f1a; --muted:#4b5563;
-  --accent:#0ea5e9; --ok:#16a34a; --warn:#b45309; --line:#e5e7eb;
-}
+:root{ --bg:#0a0f1a; --card:#111827; --text:#e6f0ff; --muted:#9fb3c8; --accent:#14b8a6; --ok:#22c55e; --warn:#f59e0b; --line:#1f2937; }
+:root.light{ --bg:#f8fafc; --card:#ffffff; --text:#0a0f1a; --muted:#4b5563; --accent:#0ea5e9; --ok:#16a34a; --warn:#b45309; --line:#e5e7eb; }
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 .header{padding:16px 16px 6px;font-weight:700;font-size:18px;display:flex;justify-content:space-between;align-items:center}
 .theme{font-size:13px;color:var(--muted)}
@@ -49,11 +42,21 @@ input[type=number]{width:90px;border:1px solid var(--line);background:transparen
 .table{width:100%;border-collapse:collapse;margin-top:6px}
 .table th,.table td{border:1px solid var(--line);padding:6px;font-size:12px;color:var(--text)}
 .table th{color:var(--muted);text-align:left}
-.settings{display:grid;grid-template-columns:1fr;gap:10px}
-.settings .row{justify-content:flex-start}
-.day-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.day-pill{padding:8px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text)}
-.select{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:8px;padding:6px}
+
+/* Warm-up */
+.wu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wu-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.wu-thumb{height:120px;background:linear-gradient(135deg,#1e3a8a,#14b8a6);display:flex;align-items:center;justify-content:center;font-weight:800}
+.wu-body{padding:8px}
+.wu-name{font-weight:700}
+.wu-desc{font-size:12px;color:var(--muted)}
+
+/* Guided flow */
+.flow{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.timer{font-size:40px;font-weight:800}
+.big-btn{display:inline-block;background:var(--accent);color:#0b0b0b;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:800}
+.success{font-size:40px;animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(.8)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -61,21 +64,23 @@ input[type=number]{width:90px;border:1px solid var(--line);background:transparen
   <div>Achilles-Friendly Gym Plan</div>
   <div class="theme"><label><input type="checkbox" id="themeToggle"> Light mode</label></div>
 </div>
+
 <div class="sub" id="todaySub"></div>
 <div class="tabs">
   <div class="tab active" data-tab="today">Today</div>
   <div class="tab" data-tab="sessions">Sessions</div>
   <div class="tab" data-tab="progress">Progress</div>
+  <div class="tab" data-tab="warmup">Warm-Up</div>
   <div class="tab" data-tab="settings">Settings</div>
 </div>
 
 <div id="view-today" class="container"></div>
 <div id="view-sessions" class="container" style="display:none"></div>
 <div id="view-progress" class="container" style="display:none"></div>
+<div id="view-warmup" class="container" style="display:none"></div>
 <div id="view-settings" class="container" style="display:none"></div>
 
-<div class="notice">Tip: In Safari, share ▶︎ <b>Add to Home Screen</b>. Works offline. Notes & history save on your iPhone.</div>
-
+<div class="notice">Tip: In Safari, Share → <b>Add to Home Screen</b>. Works offline. Notes & history save on your iPhone.</div>
 <script src="app.js"></script>
 </body>
 </html>
